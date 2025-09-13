@@ -1,0 +1,1 @@
+{"root":["./src/server.ts","./src/middleware/logger.ts","./src/middleware/validation.ts","./src/models/author.ts","./src/models/book.ts","./src/router/authors.ts","./src/router/bookroutes.ts"],"errors":true,"version":"5.9.2"}
