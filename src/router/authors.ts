@@ -4,7 +4,6 @@ import { authors, Author } from "../models/author";
 
 const router = Router();
 
-
 router.get("/", (req: Request, res: Response) => {
   res.status(200).json(authors);
 });
@@ -15,14 +14,20 @@ router.get(
   (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({
+        code: 400,
+        errors: errors.array(),
+      });
     }
 
     const id = parseInt(req.params.id);
     const author = authors.find((author) => author.id === id);
 
     if (!author) {
-      return res.status(404).json({ message: "Author not found" });
+      return res.status(404).json({
+        code: 404,
+        message: "Author not found",
+      });
     }
 
     res.status(200).json(author);
@@ -39,7 +44,24 @@ router.post(
   (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({
+        code: 400,
+        errors: errors.array(),
+      });
+    }
+
+    const duplicate = authors.find(
+      (a) =>
+        a.title === req.body.title &&
+        a.author === req.body.author &&
+        a.year === req.body.year
+    );
+
+    if (duplicate) {
+      return res.status(409).json({
+        code: 409,
+        message: "Duplicate entry: Author with same details already exists",
+      });
     }
 
     const newAuthor: Author = {
@@ -65,14 +87,20 @@ router.put(
   (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({
+        code: 400,
+        errors: errors.array(),
+      });
     }
 
     const id = parseInt(req.params.id);
     const author = authors.find((a) => a.id === id);
 
     if (!author) {
-      return res.status(404).json({ message: "Author not found" });
+      return res.status(404).json({
+        code: 404,
+        message: "Author not found",
+      });
     }
 
     author.title = req.body.title ?? author.title;
@@ -89,14 +117,20 @@ router.delete(
   (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({
+        code: 400,
+        errors: errors.array(),
+      });
     }
 
     const id = parseInt(req.params.id);
     const index = authors.findIndex((a) => a.id === id);
 
     if (index === -1) {
-      return res.status(404).json({ message: "Author not found" });
+      return res.status(404).json({
+        code: 404,
+        message: "Author not found",
+      });
     }
 
     authors.splice(index, 1);

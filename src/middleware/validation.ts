@@ -34,3 +34,14 @@ export function validate(req: Request, res: Response, next: NextFunction) {
 
   next();
 }
+export function notFound(message = "Resource not found") {
+  const error: any = new Error(message);
+  error.status = 404;
+  return error;
+}
+
+export function conflict(message = "Resource already exists") {
+  const error: any = new Error(message);
+  error.status = 409;
+  return error;
+}
