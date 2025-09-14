@@ -1,19 +1,19 @@
-import bodyParser from "body-parser"
-import express,{Express} from "express"
-import { loggerMiddleware } from "./middleware/logger"
-import router from "./router/authors"
+import express, { Express } from "express";
+import { loggerMiddleware } from "./middleware/logger";
+import authorRoutes from "./router/authors";
+import bookRoutes from "./router/books";
+
+const app: Express = express();
+const PORT = process.env.PORT || 3000;
 
 
-const app:Express = express()
-const PORT = process.env.PORT || 3000
+app.use(express.json());
+app.use(loggerMiddleware);
 
-app.use(express.json())
-app.use(bodyParser.json())
+app.use("/v1/author", authorRoutes);
+app.use("/v1/books", bookRoutes);
 
-app.use(loggerMiddleware)
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
 
-app.use("/v1/author" ,router)
-
-app.listen(PORT ,() =>{
-  console.log(`Server is running on http://localhost: ${PORT}`)
-})
